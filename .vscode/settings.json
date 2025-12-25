@@ -1,0 +1,14 @@
+{
+  "sops.enabled": false,
+  "cmake.debugConfig": {
+    "console": "integratedTerminal"
+  },
+  "cmake.configureSettings": {
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "1"
+  },
+  "cmake.exportCompileCommandsFile": true,
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build/windows-dawn"
+  ],
+  "clangd.fallbackFlags": ["-std=c++20"]
+}

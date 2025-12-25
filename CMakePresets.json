@@ -1,0 +1,160 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "vcpkg",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      },
+      "condition": {
+        "type": "notEquals",
+        "lhs": "$env{VCPKG_ROOT}",
+        "rhs": ""
+      }
+    },
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "inherits": ["default", "vcpkg"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "linux-base",
+      "hidden": true,
+      "inherits": ["default", "vcpkg"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "macos-base",
+      "hidden": true,
+      "inherits": ["default", "vcpkg"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "windows-dawn",
+      "displayName": "Windows (Dawn)",
+      "description": "Build for Windows using Dawn WebGPU backend from vcpkg",
+      "inherits": "windows-base"
+    },
+    {
+      "name": "windows-wgpu",
+      "displayName": "Windows (WGPU-Native)",
+      "description": "Build for Windows using WGPU-Native backend",
+      "inherits": "windows-base",
+      "cacheVariables": {
+        "IMGUI_WGPU_DIR": "${sourceDir}/wgpu-native"
+      }
+    },
+    {
+      "name": "linux-dawn",
+      "displayName": "Linux (Dawn)",
+      "description": "Build for Linux using Dawn WebGPU backend from vcpkg",
+      "inherits": "linux-base"
+    },
+    {
+      "name": "linux-wgpu",
+      "displayName": "Linux (WGPU-Native)",
+      "description": "Build for Linux using WGPU-Native backend",
+      "inherits": "linux-base",
+      "cacheVariables": {
+        "IMGUI_WGPU_DIR": "${sourceDir}/wgpu-native"
+      }
+    },
+    {
+      "name": "macos-dawn",
+      "displayName": "macOS (Dawn)",
+      "description": "Build for macOS using Dawn WebGPU backend from vcpkg",
+      "inherits": "macos-base"
+    },
+    {
+      "name": "macos-wgpu",
+      "displayName": "macOS (WGPU-Native)",
+      "description": "Build for macOS using WGPU-Native backend",
+      "inherits": "macos-base",
+      "cacheVariables": {
+        "IMGUI_WGPU_DIR": "${sourceDir}/wgpu-native"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-dawn-debug",
+      "displayName": "Windows Dawn Debug",
+      "configurePreset": "windows-dawn",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-dawn-release",
+      "displayName": "Windows Dawn Release",
+      "configurePreset": "windows-dawn",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-wgpu-debug",
+      "displayName": "Windows WGPU Debug",
+      "configurePreset": "windows-wgpu",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-wgpu-release",
+      "displayName": "Windows WGPU Release",
+      "configurePreset": "windows-wgpu",
+      "configuration": "Release"
+    },
+    {
+      "name": "linux-dawn-debug",
+      "displayName": "Linux Dawn Debug",
+      "configurePreset": "linux-dawn",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-dawn-release",
+      "displayName": "Linux Dawn Release",
+      "configurePreset": "linux-dawn",
+      "configuration": "Release"
+    },
+    {
+      "name": "macos-dawn-debug",
+      "displayName": "macOS Dawn Debug",
+      "configurePreset": "macos-dawn",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-dawn-release",
+      "displayName": "macOS Dawn Release",
+      "configurePreset": "macos-dawn",
+      "configuration": "Release"
+    }
+  ]
+}
