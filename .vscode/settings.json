@@ -8,7 +8,8 @@
   },
   "cmake.exportCompileCommandsFile": true,
   "clangd.arguments": [
-    "--compile-commands-dir=${workspaceFolder}/build/windows"
+    "--compile-commands-dir=${workspaceFolder}/build/windows",
+    "--experimental-modules-support"
   ],
   "clangd.fallbackFlags": ["-std=c++23"]
 }

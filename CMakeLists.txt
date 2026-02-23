@@ -1,22 +1,27 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 4.0.0)
 
-project(renderer LANGUAGES C CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(renderer LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_SCAN_FOR_MODULES ON)
-
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 
-add_executable(renderer)
+add_executable(renderer ./src/main.cpp)
+
+set_property(TARGET renderer PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET renderer PROPERTY CXX_STANDARD 23)
+set_property(TARGET renderer PROPERTY CXX_STANDARD_REQUIRED ON)
+
+set(MODULES_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
+# Glob all modules then pass them to target_sources so CMake can scan and compile them correctly
+file(GLOB_RECURSE MODULE_FILES CONFIGURE_DEPENDS
+    "${MODULES_PATH}/*.cppm"
+)
 
 target_sources(renderer
     PRIVATE
-        src/main.cpp
         src/Application.cpp
         src/EventHandler.cpp
         src/Renderer.cpp
@@ -28,29 +33,15 @@ target_sources(renderer
         ${IMGUI_DIR}/imgui_tables.cpp
         ${IMGUI_DIR}/imgui_widgets.cpp
     PRIVATE
-        FILE_SET HEADERS
-        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
-    PRIVATE
         FILE_SET CXX_MODULES
-        BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/modules
+        BASE_DIRS "${MODULES_PATH}"
+        FILES
+            ${MODULE_FILES}
 )
-
-file(GLOB MODULE_INTERFACE_UNITS CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.ixx
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.cppm
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.ixx
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cppm
-)
-
-if(MODULE_INTERFACE_UNITS)
-    target_sources(renderer
-        PRIVATE
-            FILE_SET cxx_modules TYPE CXX_MODULES FILES ${MODULE_INTERFACE_UNITS}
-    )
-endif()
 
 # TODO Remove when vcpkg works for imgui webgpu
 target_include_directories(renderer PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
 )
