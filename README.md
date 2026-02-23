@@ -11,7 +11,7 @@ A clean, modular renderer architecture with event handling separated from render
 ## Features
 
 - SDL3 for windowing and input
-- WebGPU with Dawn or WGPU-Native backends
+- WebGPU with Dawn backend (via vcpkg)
 - Dear ImGui for immediate mode GUI
 - Callback-based event handling
 - Separate event and render cycles (rendering won't block events)
@@ -21,56 +21,36 @@ A clean, modular renderer architecture with event handling separated from render
 
 ### Prerequisites
 
-1. CMake >= 3.22
+1. CMake >= 3.28
 2. C++17 compatible compiler
 3. Git
+4. vcpkg (with `VCPKG_ROOT` set)
 
 ### Setup
 
-#### Option 1: Using Dawn (Google's WebGPU implementation)
+#### vcpkg-managed setup (recommended)
 
 ```bash
 # Clone dependencies
-git clone https://github.com/google/dawn dawn
 git clone https://github.com/ocornut/imgui imgui
 
 # Configure
-cmake --preset {OS}-dawn
+cmake --preset {OS}
 
 # Build
-cmake --build --preset {OS}-dawn-debug
+cmake --build --preset {OS}-debug
 
 # Run
 ./build/Debug/renderer.exe  # Windows
 ./build/renderer             # Linux/macOS
 ```
 
-#### Option 2: Using WGPU-Native (Rust-based WebGPU)
+### Dependencies
+
+Dependencies (including SDL3 and Dawn) are installed automatically by vcpkg during CMake configure.
 
 ```bash
-# Download WGPU-Native from: https://github.com/gfx-rs/wgpu-native/releases
-# Extract to a folder (e.g., wgpu-native)
-
-# Clone ImGui
-git clone https://github.com/ocornut/imgui imgui
-
-# Configure
-cmake -B build -DIMGUI_WGPU_DIR=wgpu-native
-
-# Build
-cmake --build build
-
-# Run
-./build/Debug/renderer.exe  # Windows
-./build/renderer             # Linux/macOS
-```
-
-### SDL3 Installation
-
-Should be done by vcpkg automatically as part of cmake configuration
-
-```bash
-vcpkg install sdl3
+vcpkg install
 ```
 
 ## Usage

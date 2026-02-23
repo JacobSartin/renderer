@@ -1,4 +1,22 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-  "dependencies": ["assimp", "sdl3", "dawn"]
+  "dependencies": [
+    "assimp",
+    "sdl3",
+    {
+      "name": "dawn",
+      "features": ["d3d12"],
+      "platform": "windows"
+    },
+    {
+      "name": "dawn",
+      "features": ["vulkan"],
+      "platform": "linux"
+    },
+    {
+      "name": "dawn",
+      "features": ["metal"],
+      "platform": "osx"
+    }
+  ]
 }
